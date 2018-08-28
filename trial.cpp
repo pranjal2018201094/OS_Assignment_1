@@ -12,11 +12,19 @@
 
 int mode()
 {
-    int c,d,e;
+    int c;
 	int position=0;
+    int scroll_up=0,scroll_down=0,cursor=0;
+
+    char cwd[256];
+
+    stack<string>stack_backward;
+    stack<string>stack_forward;
 	
     struct dirent *dir;
     struct stat st;
+
+//getcwd();
 
     static struct termios term, oterm;
     //non c mode enter
@@ -31,17 +39,35 @@ int mode()
     tcsetattr(0, TCSANOW, &term);
     // tcsetattr(0, TCSANOW, &oterm);
     fflush(stdout);
+
     
     FOREVER : vector <struct dirent *> dir_cur(disp_dir());
+    /*if(scroll_down<=0)
+    {
+        printf("\033[1;1H");
+    }*/
     printf("\033[1;1H");
 
-    while (1) {
+    while (1) 
+    {  
+        /*if(cursor>20)
+        {
+            scroll_down++;
+            position--;
+            goto FOREVER;
+        }
 
-        
+        if(position<0)
+        {
+            scroll_up++;
+            position++;
+            goto FOREVER;
+            
+        } */    
+        //if(scroll_up)  
     
-    
-    c = getchar();
-        
+        c = getchar();
+            
         if (c == 27 ) 
         {
             c=getchar();
@@ -54,19 +80,55 @@ int mode()
                 {
                     printf("\033[1A");
                     position--;
+                    //scroll_down--;
+                    //scroll_down--;
                 }
                 else if(c==66)
                 {
                     printf("\033[1B");
                         position++;
+                        cursor++;
+                        //scroll_down++;
+                        //scroll_down++;
                 }
                 else if (c==67)
                 {
+                   if(!stack_forward.empty())
+                    {
+                        //getcwd();
+                        getcwd(cwd, sizeof(cwd));
+                        stack_backward.push(cwd);
+
+                        string top =stack_forward.top();
+                        chdir(top.c_str());
+                        stack_forward.pop();
+                        goto FOREVER;
+                    }
+                    else
+                    {
+                        //stack_backward.push(dir_cur[position]->d_name);
+                    }
+                    //goto FOREVER;
+
                     //printf("\033[1C");
                 }
                 else if (c==68)
                 {
+                    if(!stack_backward.empty())
+                    {
+                         getcwd(cwd, sizeof(cwd));
+                        stack_forward.push(cwd);
+                        string top =stack_backward.top();
+                        chdir(top.c_str());
+                        stack_backward.pop();
+                        goto FOREVER;
+                    }
+                    else
+                    {
+                        //stack_backward.push(dir_cur[position]->d_name);
+                    }
                     //printf("\033[1D");
+                    //goto FOREVER;
                 }
 
             }
@@ -74,11 +136,19 @@ int mode()
         }
         else if(c=='\n')
         {
+
+            for(int k=0;k<stack_forward.size();k++)
+            {
+                stack_forward.pop();
+            }
+
+            getcwd(cwd, sizeof(cwd));
+            
+            stack_backward.push(cwd);
+
+            
             stat(dir_cur[position]->d_name, &st);
-            //string file_name;
-            //file_name=dir_cur[position]->d_name;
-            //cout<<S_ISDIR(st.st_mode);
-            //printf( (S_ISDIR(st.st_mode)) ? "d" : "-");
+            
             if(S_ISDIR(st.st_mode))
             {
                 chdir(dir_cur[position]->d_name);
@@ -87,9 +157,9 @@ int mode()
             }
             else
             {
-                pid_t pid;
-                pid=fork();
-                if(pid==0)
+                pid_t pro;
+                pro=fork();
+                if(pro==0)
                 {
                     execl("/usr/bin/xdg-open","xdg-open",dir_cur[position]->d_name,(char *)0);
                     exit(1);
@@ -124,8 +194,19 @@ int mode()
             //printf("\033[1;1H");
             break;
         }
+        else if (c==58)
+        {
+            tcsetattr(0, TCSANOW, &oterm);
+            cout<<"\033[40;1H";
+            // //printf("\033[1;1H");
+            break;
+        }
 
     }
+    
+    
+    
+    
     return 0;
 }
 
