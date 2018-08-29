@@ -42,10 +42,7 @@ int mode()
     int scroll_up=1,scroll_down=10,cursor=1,flag=0;
     
     FOREVER : vector <struct dirent *> dir_cur(disp_dir(scroll_up,scroll_down));
-    /*if(scroll_down<=0)
-    {
-        printf("\033[1;1H");
-    }*/
+   
     if(flag==1)
     {
         printf("\033[%d;1H",cursor);
@@ -58,9 +55,7 @@ int mode()
     }
 
     while (1) 
-    {  
-
-
+    {
     
         c = getchar();
             
@@ -80,46 +75,47 @@ int mode()
                     {
                         position--;
                         printf("\033[1A");
+                    	
+                    	if(cursor<=1)
+	                    {
+	                        if(scroll_up>1)
+	                        {
+	                            scroll_down--;
+	                            scroll_up--;
+	                        }
+	                        goto FOREVER;
+	                    }
+	                    else
+	                    {
+	                        cursor--;
+	                    }
                     }
-                    if(cursor<1)
-                    {
-                        if(scroll_up>1)
-                        {
-                            scroll_down--;
-                            scroll_up--;
-                        }
-                        goto FOREVER;
-                    }
-                    else
-                    {
-                        cursor--;
-                    }
-                    
-                    //scroll_down--;
-                    //scroll_down--;
+            
                 }
                 else if(c==66)
                 {
                     flag=1;
 
-                    if(position<dir_cur.size())
+                    if(position<dir_cur.size()-1)
                     {
                         position++;
                         printf("\033[1B");
+                    	if(cursor>=10)
+	                    {
+	                        if(scroll_up<11)
+	                        {
+	                            scroll_down++;
+	                            scroll_up++;
+	                        }
+	                        goto FOREVER;
+	                    }
+	                    else
+	                    {
+	                        cursor++;
+	                    }
                     }
-                    if(cursor>10)
-                    {
-                        if(scroll_up<11)
-                        {
-                            scroll_down++;
-                            scroll_up++;
-                        }
-                        goto FOREVER;
-                    }
-                    else
-                    {
-                        cursor++;
-                    }
+	            
+
                     //cursor++;
                         //scroll_down++;
                         //scroll_down++;
@@ -135,6 +131,12 @@ int mode()
                         string top =stack_forward.top();
                         chdir(top.c_str());
                         stack_forward.pop();
+                        
+                        position=0;
+		                scroll_up=1;
+		                scroll_down=10;
+		                cursor=1;
+                        
                         goto FOREVER;
                     }
                     else
@@ -153,6 +155,12 @@ int mode()
                         string top =stack_backward.top();
                         chdir(top.c_str());
                         stack_backward.pop();
+
+                        position=0;
+		                scroll_up=1;
+		                scroll_down=10;
+		                cursor=1;
+
                         goto FOREVER;
                     }
                     else
@@ -184,7 +192,12 @@ int mode()
             if(S_ISDIR(st.st_mode))
             {
                 chdir(dir_cur[position]->d_name);
+                
                 position=0;
+                scroll_up=1;
+                scroll_down=10;
+                cursor=1;
+                
                 goto FOREVER;
             }
             else
@@ -209,7 +222,12 @@ int mode()
             stack_backward.push(cwd);
 
             chdir(root);
+            
             position=0;
+            scroll_up=1;
+            scroll_down=10;
+            cursor=1;
+            
             goto FOREVER;
             //break;
         }
@@ -221,7 +239,12 @@ int mode()
             stack_backward.push(cwd);
 
             chdir("..");
+            
             position=0;
+            scroll_up=1;
+            scroll_down=10;
+            cursor=1;
+            
             goto FOREVER;
             //break;
 
@@ -245,9 +268,6 @@ int mode()
         }
 
     }
-    
-    
-    
     
     return 0;
 }
