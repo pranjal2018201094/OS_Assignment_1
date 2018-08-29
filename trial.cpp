@@ -7,16 +7,15 @@
 #include <sys/types.h>
 #include <bits/stdc++.h>
 
-
-#include "disp_dir.cpp"
+#include "custom_command_1.cpp"
 
 int mode()
 {
     int c;
 	int position=0;
-    int scroll_up=0,scroll_down=0,cursor=0;
 
-    char cwd[256];
+
+    char cwd[256],root[256];
 
     stack<string>stack_backward;
     stack<string>stack_forward;
@@ -24,7 +23,7 @@ int mode()
     struct dirent *dir;
     struct stat st;
 
-//getcwd();
+    getcwd(root, sizeof(root));
 
     static struct termios term, oterm;
     //non c mode enter
@@ -40,31 +39,28 @@ int mode()
     // tcsetattr(0, TCSANOW, &oterm);
     fflush(stdout);
 
+    int scroll_up=1,scroll_down=10,cursor=1,flag=0;
     
-    FOREVER : vector <struct dirent *> dir_cur(disp_dir());
+    FOREVER : vector <struct dirent *> dir_cur(disp_dir(scroll_up,scroll_down));
     /*if(scroll_down<=0)
     {
         printf("\033[1;1H");
     }*/
-    printf("\033[1;1H");
+    if(flag==1)
+    {
+        printf("\033[%d;1H",cursor);
+        flag=0;
+    }
+    else
+    {
+        printf("\033[1;1H");
+        flag=0;
+    }
 
     while (1) 
     {  
-        /*if(cursor>20)
-        {
-            scroll_down++;
-            position--;
-            goto FOREVER;
-        }
 
-        if(position<0)
-        {
-            scroll_up++;
-            position++;
-            goto FOREVER;
-            
-        } */    
-        //if(scroll_up)  
+
     
         c = getchar();
             
@@ -78,16 +74,53 @@ int mode()
 
                 if(c==65)
                 {
-                    printf("\033[1A");
-                    position--;
+                    flag=1;
+                    
+                    if(position>0)
+                    {
+                        position--;
+                        printf("\033[1A");
+                    }
+                    if(cursor<1)
+                    {
+                        if(scroll_up>1)
+                        {
+                            scroll_down--;
+                            scroll_up--;
+                        }
+                        goto FOREVER;
+                    }
+                    else
+                    {
+                        cursor--;
+                    }
+                    
                     //scroll_down--;
                     //scroll_down--;
                 }
                 else if(c==66)
                 {
-                    printf("\033[1B");
+                    flag=1;
+
+                    if(position<dir_cur.size())
+                    {
                         position++;
+                        printf("\033[1B");
+                    }
+                    if(cursor>10)
+                    {
+                        if(scroll_up<11)
+                        {
+                            scroll_down++;
+                            scroll_up++;
+                        }
+                        goto FOREVER;
+                    }
+                    else
+                    {
                         cursor++;
+                    }
+                    //cursor++;
                         //scroll_down++;
                         //scroll_down++;
                 }
@@ -108,16 +141,15 @@ int mode()
                     {
                         //stack_backward.push(dir_cur[position]->d_name);
                     }
-                    //goto FOREVER;
-
-                    //printf("\033[1C");
+                    
                 }
                 else if (c==68)
                 {
                     if(!stack_backward.empty())
                     {
-                         getcwd(cwd, sizeof(cwd));
+                        getcwd(cwd, sizeof(cwd));
                         stack_forward.push(cwd);
+
                         string top =stack_backward.top();
                         chdir(top.c_str());
                         stack_backward.pop();
@@ -166,21 +198,28 @@ int mode()
                 }
 
             }
-
-            
             //cout<<"\033[2J\033[1;1H";
             //break;
 
         }
         else if(c=='h'||c=='H')
         {
-            chdir("/home/");
+            getcwd(cwd, sizeof(cwd));
+            
+            stack_backward.push(cwd);
+
+            chdir(root);
             position=0;
             goto FOREVER;
             //break;
         }
         else if(c==127)
         {
+
+            getcwd(cwd, sizeof(cwd));
+            
+            stack_backward.push(cwd);
+
             chdir("..");
             position=0;
             goto FOREVER;
@@ -197,7 +236,10 @@ int mode()
         else if (c==58)
         {
             tcsetattr(0, TCSANOW, &oterm);
+            cout<<"\033[36;1H";
+            cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
             cout<<"\033[40;1H";
+            custom_command();
             // //printf("\033[1;1H");
             break;
         }

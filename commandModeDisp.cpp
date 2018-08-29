@@ -5,8 +5,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
-#include "permissions.cpp"
-vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
+//#include "permissions.cpp"
+void commandModeDisp() {
 	DIR *d;
 	int size;
 	vector<struct dirent *>v;
@@ -17,19 +17,13 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
 	if (d)
 	 	{
 			int i=1;
-			
-			//int index=10;
-			//int p=scroll_down;    &&(scroll_down+10)>q
-			//int q=0;
+
 			while ((dir = readdir(d)) != NULL)
 			{	
-				v.push_back(dir);
 
-				if(i<=scroll_down&&i>=scroll_up)
-				{
 					printf("%10d\t",i);
 					
-					
+					v.push_back(dir);
 					if(strlen(dir->d_name)>20)
 					{
 						for(int i=0;i<18;i++)
@@ -49,18 +43,12 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
 					permissions(st.st_mode);
 					
 					time_conv(st.st_mtime);
-					
-				}
-				//q++;
+
 				i++;
 
 		    }
 	       	closedir(d);
 		}
-	//cout<<
-		cout<<"\033[36;1H";
-        cout<<"WELCOME TO NORMAL MODE";
-	return v;
 }
 
 

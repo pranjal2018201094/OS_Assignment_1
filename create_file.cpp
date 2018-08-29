@@ -8,9 +8,9 @@
 
 using namespace std;
 
-int create_f_d(string stream0,string stream1,string stream2)
+int main()
 {
-	/*string line,temp;
+	string line,temp;
     //char rnm[6],xt[4];
     getline(cin, line);
     
@@ -20,12 +20,12 @@ int create_f_d(string stream0,string stream1,string stream2)
     {
         stream.push_back(temp);
     }
-*/
-	 if(stream0=="create_dir") //this should be fine because you inputted to line and are comparing to line
+
+	 if(stream[0]=="create_dir") //this should be fine because you inputted to line and are comparing to line
     {
      
-		chdir(stream2.c_str());
-		mkdir(stream1.c_str(),S_IRWXU | S_IRWXG | S_IRWXO);   
+		chdir(stream[2].c_str());
+		mkdir(stream[1].c_str(),S_IRWXU | S_IRWXG | S_IRWXO);   
 		cout<<"successfully created";
         //goto front;
     }

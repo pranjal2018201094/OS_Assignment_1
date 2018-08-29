@@ -8,17 +8,18 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-
+#include "create_f_d.cpp"
 #include "disp_dir.cpp"
+#include "commandModeDisp.cpp"
 
 using namespace std;
 
-int main ()
+int custom_command()
 {
     front :
     cout<<"$";
     string line,temp;
-    //char rnm[6],xt[4];
+    
     getline(cin, line);
     //cin>>line;
     //cout<<line;
@@ -28,42 +29,59 @@ int main ()
     {
         stream.push_back(temp);
     }
-
-    /*for(int i=0;i<stream.size();i++)
-    {
-        cout<<stream[i]<<endl;
-    }*/
     
-    if(stream[0]=="rename") //this should be fine because you inputted to line and are comparing to line
+    if(stream[0]=="rename") 
     {
         //cout<<"rename_chala"<<endl;
 
         if (rename(stream[1].c_str(),stream[2].c_str()) == 0)
         {
-            printf("File renamed successfully.\n");
+            commandModeDisp();
+            cout<<"\033[36;1H";
+            cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
+            cout<<"Incorrect File Name"<<endl;
+            cout<<"\033[40;1H";
+            //cout<<"\033[37;1H";
         }
         else
         {
-            printf("Unable to rename files. Please check files exist and you have permissions to modify files.\n");
+            cout<<"\033[2J\033[1;1H";
+            commandModeDisp();
+            cout<<"\033[36;1H";
+            cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
+            cout<<"Incorrect File Name"<<endl;
+            cout<<"\033[40;1H";
         }
 
         goto front;//never do this
     }
-    else if(stream[0]=="exit") //what if they entered one of the other commands?
+    else if(stream[0]=="exit") 
     {
         //cout<<"exit_chala";
         goto xyz;
         //return 0;
     }
-    else if(stream[0]=="goto") //what if they entered one of the other commands?
+    else if(stream[0]=="goto") 
     {
         chdir(stream[1].c_str());
-        disp_dir();
+        commandModeDisp();
+    }
+    else if(stream[0]=="create_dir")
+    {
+        create_f_d(stream[0],stream[1],stream[2]);
     }
     else
     {
+
+        cout<<"\033[2J\033[1;1H";
+        commandModeDisp();
+        cout<<"\033[36;1H";
+        cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
         cout<<"wrong command"<<endl;
-        goto front; //never do this
+        cout<<"\033[40;1H";
+        cout<<"\033[1;1H";
+        
+        goto front; 
     }
 
     xyz : cin.ignore(unsigned(-1), '\n'); //never do this, instead use: system("PAUSE > NULL");;
