@@ -7,8 +7,10 @@
 #include <sys/types.h>
 #include <bits/stdc++.h>
 
+//#include<headerss.h>
 #include "command_mode_main.cpp"
 #include "disp_dir.cpp"
+
 int normal_mode()
 {
     int c;
@@ -267,13 +269,14 @@ int normal_mode()
         }
         else if (c==58)
         {
-            tcsetattr(0, TCSANOW, &oterm);
+            //tcsetattr(0, TCSANOW, &oterm);
             cout<<"\033[36;1H";
             cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
             cout<<"\033[40;1H";
             command_mode_main();
-            // //printf("\033[1;1H");
+            printf("\033[1;1H");
             //break;
+            goto FOREVER;
         }
 
     }

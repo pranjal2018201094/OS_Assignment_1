@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
-#include "permissions.cpp"
+
 void commandModeDisp() {
 	DIR *d;
 	int size;
@@ -40,9 +40,23 @@ void commandModeDisp() {
 					stat(dir->d_name, &st);
 					size = st.st_size;
 					printf("%10d\t", size);
-					permissions(st.st_mode);
+
+					//Permissions settings
+					printf( (S_ISDIR(st.st_mode)) ? "d" : "-");
+					printf( (st.st_mode & S_IRUSR) ? "r" : "-");
+					printf( (st.st_mode & S_IWUSR) ? "w" : "-");
+					printf( (st.st_mode & S_IXUSR) ? "x" : "-");
+					printf( (st.st_mode & S_IRGRP) ? "r" : "-");
+					printf( (st.st_mode & S_IWGRP) ? "w" : "-");
+					printf( (st.st_mode & S_IXGRP) ? "x" : "-");
+					printf( (st.st_mode & S_IROTH) ? "r" : "-");
+					printf( (st.st_mode & S_IWOTH) ? "w" : "-");
+					printf( (st.st_mode & S_IXOTH) ? "x" : "-");
+					printf("\t");
 					
-					time_conv(st.st_mtime);
+					//time Display
+					long int tim=(st.st_mtime);
+					cout<<ctime(&tim);
 
 				i++;
 
@@ -50,9 +64,3 @@ void commandModeDisp() {
 	       	closedir(d);
 		}
 }
-
-
-
-
-
-

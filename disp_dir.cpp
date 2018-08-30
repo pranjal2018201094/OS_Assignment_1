@@ -5,7 +5,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
-#include "permissions.cpp"
+
+int time_conv(long int lin_tim);
+int permissions(int mode_v);
 vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
 	DIR *d;
 	int size;
@@ -18,9 +20,6 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
 	 	{
 			int i=1;
 			
-			//int index=10;
-			//int p=scroll_down;    &&(scroll_down+10)>q
-			//int q=0;
 			while ((dir = readdir(d)) != NULL)
 			{	
 				v.push_back(dir);
@@ -46,10 +45,23 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
 					stat(dir->d_name, &st);
 					size = st.st_size;
 					printf("%10d\t", size);
-					permissions(st.st_mode);
+				
 					
-					time_conv(st.st_mtime);
+					printf( (S_ISDIR(st.st_mode)) ? "d" : "-");
+					printf( (st.st_mode & S_IRUSR) ? "r" : "-");
+					printf( (st.st_mode & S_IWUSR) ? "w" : "-");
+					printf( (st.st_mode & S_IXUSR) ? "x" : "-");
+					printf( (st.st_mode & S_IRGRP) ? "r" : "-");
+					printf( (st.st_mode & S_IWGRP) ? "w" : "-");
+					printf( (st.st_mode & S_IXGRP) ? "x" : "-");
+					printf( (st.st_mode & S_IROTH) ? "r" : "-");
+					printf( (st.st_mode & S_IWOTH) ? "w" : "-");
+					printf( (st.st_mode & S_IXOTH) ? "x" : "-");
+					printf("\t");
 					
+					//time Display
+					long int tim=(st.st_mtime);
+					cout<<ctime(&tim);
 				}
 				//q++;
 				i++;
@@ -62,9 +74,3 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
         cout<<"WELCOME TO NORMAL MODE";
 	return v;
 }
-
-
-
-
-
-
