@@ -3,23 +3,22 @@
 void renamer(string old_name,string new_name)
 {
 
-    //char old_name[50], new_name[50];
-
-    // Input old and new file name
-    /*printf("Enter old file path: ");
-    scanf("%s", old_name);
-
-    printf("Enter new file path: ");
-    scanf("%s", new_name);
-
-*/
-    // rename old file with new name
-    if (rename(old_name, new_name )== 0)
+    if (rename(old_name.c_str(),new_name.c_str()) == 0)
     {
-        printf("File renamed successfully.\n");
+        //commandModeDisp();
+        cout<<"\033[36;1H";
+        cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
+        cout<<"Incorrect File Name"<<endl;
+        cout<<"\033[40;1H";
+        //cout<<"\033[37;1H";
     }
     else
     {
-        printf("Unable to rename files. Please check files exist and you have permissions to modify files.\n");
+        cout<<"\033[2J\033[1;1H";
+        //commandModeDisp();
+        cout<<"\033[36;1H";
+        cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
+        cout<<"Incorrect File Name"<<endl;
+        cout<<"\033[40;1H";
     }
 }

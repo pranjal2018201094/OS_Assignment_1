@@ -8,6 +8,6 @@
 #include "trial.cpp"
 int main()
 {
-	mode();
+	normal_mode();
 	return 0;
 }

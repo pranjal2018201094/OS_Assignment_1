@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
-//#include "permissions.cpp"
+#include "permissions.cpp"
 void commandModeDisp() {
 	DIR *d;
 	int size;

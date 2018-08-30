@@ -9,62 +9,32 @@
 #include <sys/types.h>
 
 #include "create_f_d.cpp"
-#include "disp_dir.cpp"
-#include "commandModeDisp.cpp"
+//#include "commandModeDisp.cpp"
+#include "rename.cpp"
 
 using namespace std;
 
-int custom_command()
+int custom_command(vector<string>stream)
 {
     front :
-    cout<<"$";
-    string line,temp;
     
+    /*string line,temp;
     getline(cin, line);
-    //cin>>line;
-    //cout<<line;
     vector<string>stream;
     stringstream check(line);
     while(getline(check,temp,' '))
     {
         stream.push_back(temp);
-    }
+    }*/
     
     if(stream[0]=="rename") 
     {
-        //cout<<"rename_chala"<<endl;
-
-        if (rename(stream[1].c_str(),stream[2].c_str()) == 0)
-        {
-            commandModeDisp();
-            cout<<"\033[36;1H";
-            cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
-            cout<<"Incorrect File Name"<<endl;
-            cout<<"\033[40;1H";
-            //cout<<"\033[37;1H";
-        }
-        else
-        {
-            cout<<"\033[2J\033[1;1H";
-            commandModeDisp();
-            cout<<"\033[36;1H";
-            cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
-            cout<<"Incorrect File Name"<<endl;
-            cout<<"\033[40;1H";
-        }
-
-        goto front;//never do this
-    }
-    else if(stream[0]=="exit") 
-    {
-        //cout<<"exit_chala";
-        goto xyz;
-        //return 0;
+        renamer(stream[2],stream[1]);
     }
     else if(stream[0]=="goto") 
     {
         chdir(stream[1].c_str());
-        commandModeDisp();
+        //commandModeDisp();
     }
     else if(stream[0]=="create_dir")
     {
@@ -74,7 +44,7 @@ int custom_command()
     {
 
         cout<<"\033[2J\033[1;1H";
-        commandModeDisp();
+        //commandModeDisp();
         cout<<"\033[36;1H";
         cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
         cout<<"wrong command"<<endl;

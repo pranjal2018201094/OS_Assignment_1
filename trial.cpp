@@ -7,9 +7,9 @@
 #include <sys/types.h>
 #include <bits/stdc++.h>
 
-#include "custom_command_1.cpp"
-
-int mode()
+#include "command_mode_main.cpp"
+#include "disp_dir.cpp"
+int normal_mode()
 {
     int c;
 	int position=0;
@@ -217,6 +217,11 @@ int mode()
         }
         else if(c=='h'||c=='H')
         {
+        	for(int k=0;k<stack_forward.size();k++)
+            {
+                stack_forward.pop();
+            }
+
             getcwd(cwd, sizeof(cwd));
             
             stack_backward.push(cwd);
@@ -233,6 +238,10 @@ int mode()
         }
         else if(c==127)
         {
+        	for(int k=0;k<stack_forward.size();k++)
+            {
+                stack_forward.pop();
+            }
 
             getcwd(cwd, sizeof(cwd));
             
@@ -262,9 +271,9 @@ int mode()
             cout<<"\033[36;1H";
             cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
             cout<<"\033[40;1H";
-            custom_command();
+            command_mode_main();
             // //printf("\033[1;1H");
-            break;
+            //break;
         }
 
     }
