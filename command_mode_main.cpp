@@ -7,18 +7,19 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <bits/stdc++.h>
-
-//#include<headerss.h>
-
+#include <string>
 using namespace std;
-# include "commandModeDisp.cpp"
+#include "commandModeDisp.h"
+#include "command_mode_main.h"
+
 int custom_command(vector<string>stream);
 int renamer(string old_name,string new_name);
 int create_f_d(string stream0,string stream1,string stream2);
 
+
 int command_mode_main()
 {
-    cout<<"$";
+    //cout<<"$";
 
     char c,buffer[200];
     int i=0;
@@ -37,6 +38,10 @@ int command_mode_main()
 		    }
 		    
 		    custom_command(stream);
+            /*for(int i=0;i<stream.size();i++)
+            {
+                cout<<stream[i];
+            }*/
 		    i=0;
 		    while(buffer[i]!='\0')
 		    {
@@ -51,15 +56,15 @@ int command_mode_main()
     	}
     	else if(c=='\b')
     	{
-    		/*i--;
+    		i--;
     		
     		buffer[i]=' ';
     		cout<<buffer[i];
     		buffer[i-1]='\0';
     		cout<<printf("\033[1D");
-    		//i--;
-    		tcsetattr(0, TCSANOW, &oterm);
-    		//cout<<"0x07f";*/
+    		i--;
+    		//tcsetattr(0, TCSANOW, &oterm);
+    		//cout<<"0x07f";
     		break;
     	}
     	else
@@ -77,13 +82,20 @@ int custom_command(vector<string>stream)
     
     if(stream[0]=="rename") 
     {
-        renamer(stream[2],stream[1]);
+        cout<<stream[1];
+        cout<<stream[2];
+        renamer(stream[1],stream[2]);
         return 0;
     }
     else if(stream[0]=="goto") 
     {
+        //cout<<"\033[2J\033[1;1H";
         chdir(stream[1].c_str());
         commandModeDisp();
+        cout<<"\033[36;1H";
+        cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
+        cout<<"\033[40;1H";
+        return 0;
     }
     else if(stream[0]=="create_dir")
     {
@@ -91,13 +103,14 @@ int custom_command(vector<string>stream)
     }
     else
     {
-        cout<<"\033[2J\033[1;1H";
+        //cout<<"\033[2J\033[1;1H";
         commandModeDisp();
         cout<<"\033[36;1H";
         cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
         cout<<"wrong command"<<endl;
         cout<<"\033[40;1H";
         //cout<<"\033[1;1H";
+        return 0;
         
     }
 
@@ -112,7 +125,7 @@ int renamer(string old_name,string new_name)
     {
         commandModeDisp();
         cout<<"\033[36;1H";
-        cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
+        cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE"<<endl;
         cout<<"Successfully Done !!!"<<endl;
         cout<<"\033[40;1H";
         //cout<<"\033[37;1H";

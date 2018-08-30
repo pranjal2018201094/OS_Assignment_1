@@ -5,8 +5,12 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
+using namespace std;
+//#include "main.h"
+#include "commandModeDisp.h"
 
-void commandModeDisp() {
+int commandModeDisp()
+{
 	DIR *d;
 	int size;
 	vector<struct dirent *>v;
@@ -18,7 +22,7 @@ void commandModeDisp() {
 	 	{
 			int i=1;
 
-			while ((dir = readdir(d)) != NULL)
+			while ((dir = readdir(d)) != NULL&&i<35)
 			{	
 
 					printf("%10d\t",i);
@@ -63,4 +67,5 @@ void commandModeDisp() {
 		    }
 	       	closedir(d);
 		}
+		return 0;
 }

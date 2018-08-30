@@ -6,8 +6,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-//#include<headerss.h>
-#include "trial.cpp"
+#include "normal_mode.h"
 int main()
 {
 	normal_mode();

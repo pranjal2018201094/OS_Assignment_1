@@ -6,10 +6,12 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <bits/stdc++.h>
+using namespace std;
 
-//#include<headerss.h>
-#include "command_mode_main.cpp"
-#include "disp_dir.cpp"
+#include "command_mode_main.h"
+#include "disp_dir.h"
+#include "normal_mode.h"
+//#include "command_mode_main.cpp"
 
 int normal_mode()
 {
@@ -102,6 +104,7 @@ int normal_mode()
                     {
                         position++;
                         printf("\033[1B");
+
                     	if(cursor>=10)
 	                    {
 	                        if(scroll_up<11)
@@ -117,16 +120,11 @@ int normal_mode()
 	                    }
                     }
 	            
-
-                    //cursor++;
-                        //scroll_down++;
-                        //scroll_down++;
                 }
                 else if (c==67)
                 {
                    if(!stack_forward.empty())
                     {
-                        //getcwd();
                         getcwd(cwd, sizeof(cwd));
                         stack_backward.push(cwd);
 
@@ -143,7 +141,7 @@ int normal_mode()
                     }
                     else
                     {
-                        //stack_backward.push(dir_cur[position]->d_name);
+                       
                     }
                     
                 }
@@ -167,10 +165,9 @@ int normal_mode()
                     }
                     else
                     {
-                        //stack_backward.push(dir_cur[position]->d_name);
+                        
                     }
-                    //printf("\033[1D");
-                    //goto FOREVER;
+                    
                 }
 
             }
@@ -211,11 +208,7 @@ int normal_mode()
                     execl("/usr/bin/xdg-open","xdg-open",dir_cur[position]->d_name,(char *)0);
                     exit(1);
                 }
-
             }
-            //cout<<"\033[2J\033[1;1H";
-            //break;
-
         }
         else if(c=='h'||c=='H')
         {

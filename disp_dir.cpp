@@ -5,10 +5,12 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
+using namespace std;
+//#include "main.h"
 
-int time_conv(long int lin_tim);
-int permissions(int mode_v);
-vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) {
+
+vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) 
+{
 	DIR *d;
 	int size;
 	vector<struct dirent *>v;
