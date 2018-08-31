@@ -107,11 +107,9 @@ int normal_mode()
 
                     	if(cursor>=10)
 	                    {
-	                        if(scroll_up<11)
-	                        {
-	                            scroll_down++;
-	                            scroll_up++;
-	                        }
+                            scroll_down++;
+                            scroll_up++;
+
 	                        goto FOREVER;
 	                    }
 	                    else
@@ -190,6 +188,7 @@ int normal_mode()
             
             if(S_ISDIR(st.st_mode))
             {
+                
                 chdir(dir_cur[position]->d_name);
                 
                 position=0;

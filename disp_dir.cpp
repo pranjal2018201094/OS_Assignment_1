@@ -6,8 +6,8 @@
 #include <sys/types.h>
 #include <time.h>
 using namespace std;
+#include "disp_dir.h"
 //#include "main.h"
-
 
 vector<struct dirent *> disp_dir(int scroll_up,int scroll_down) 
 {
@@ -33,9 +33,9 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down)
 					
 					if(strlen(dir->d_name)>20)
 					{
-						for(int i=0;i<18;i++)
+						for(int j=0;j<18;j++)
 						{
-						printf("%c",dir->d_name[i]);
+						printf("%c",dir->d_name[j]);
 						}
 						printf("..");
 					}
