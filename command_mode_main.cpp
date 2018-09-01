@@ -23,8 +23,7 @@ int cp_mv(vector<string>v);
 int command_mode_main()
 {
     //cout<<"$";
-
-    char c,buffer[300];
+    char c,buffer[500]="";
     int i=0;
     while(1)
     {
@@ -217,9 +216,6 @@ int cp_mv(vector<string>v)
     if(v[0]=="copy")
     {
         
-        //chdir(stream2.c_str());
-        
-        //char block[1024];
         int in, out,max;
         int nread;
         char old_path[256];

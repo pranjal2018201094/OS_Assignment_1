@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
+#include <pwd.h>
+#include <grp.h>
 using namespace std;
 //#include "main.h"
 #include "commandModeDisp.h"
@@ -28,17 +30,18 @@ int commandModeDisp()
 					//printf("%4d\t",i);
 					
 					v.push_back(dir);
+					
 					if(strlen(dir->d_name)>15)
 					{
-						for(int i=0;i<13;i++)
+						for(int j=0;j<13;j++)
 						{
-						printf("%c",dir->d_name[i]);
+						printf("%c",dir->d_name[j]);
 						}
 						printf("..");
 					}
 					else
 					{
-						printf("%15s",dir->d_name);
+						printf("%-15s",dir->d_name);
 					}
 					//cout<<"\t";
 					stat(dir->d_name, &st);
@@ -46,16 +49,43 @@ int commandModeDisp()
 					if(size>1024*1024)
 					{
 						size=size/1024/1024;
-						printf("%5dMB ", size);
+						printf(" %-5dMB ", size);
 					}
 					else if(size>1024)
 					{
 						size=size/1024;
-						printf("%5dKB ", size);
+						printf(" %-5dKB ", size);
 					}
 					else
 					{
-						printf("%5d B ", size);	
+						printf(" %-6dB ", size);	
+					}
+
+					struct passwd *pw = getpwuid(st.st_uid);
+				    struct group  *gr = getgrgid(st.st_gid);
+				    if(strlen(pw->pw_name)>8)
+					{
+						for(int j=0;j<6;j++)
+						{
+						printf("%c",pw->pw_name[j]);
+						}
+						printf("..");
+					}
+					else
+					{
+						printf("%-8s",pw->pw_name);
+					}
+					if(strlen(gr->gr_name)>8)
+					{
+						for(int j=0;j<6;j++)
+						{
+						printf("%c",gr->gr_name[j]);
+						}
+						printf("..");
+					}
+					else
+					{
+						printf("%-8s",gr->gr_name);
 					}
 					//Permissions settings
 					printf( (S_ISDIR(st.st_mode)) ? "d" : "-");

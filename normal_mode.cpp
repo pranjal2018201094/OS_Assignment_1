@@ -43,7 +43,7 @@ int normal_mode()
     // tcsetattr(0, TCSANOW, &oterm);
     fflush(stdout);
 
-    int scroll_up=1,scroll_down=20,cursor=1,flag=0;
+    int scroll_up=1,scroll_down=18,cursor=1,flag=0;
     
     FOREVER : vector <struct dirent *> dir_cur(disp_dir(scroll_up,scroll_down));
    
@@ -105,7 +105,7 @@ int normal_mode()
                         position++;
                         printf("\033[1B");
 
-                    	if(cursor>=20)
+                    	if(cursor>=18)
 	                    {
                             scroll_down++;
                             scroll_up++;
@@ -132,7 +132,7 @@ int normal_mode()
                         
                         position=0;
 		                scroll_up=1;
-		                scroll_down=20;
+		                scroll_down=18;
 		                cursor=1;
                         
                         goto FOREVER;
@@ -156,7 +156,7 @@ int normal_mode()
 
                         position=0;
 		                scroll_up=1;
-		                scroll_down=20;
+		                scroll_down=18;
 		                cursor=1;
 
                         goto FOREVER;
@@ -181,29 +181,22 @@ int normal_mode()
 
             getcwd(cwd, sizeof(cwd));
             
-            stack_backward.push(cwd);
-
-            
             stat(dir_cur[position]->d_name, &st);
             
             if(S_ISDIR(st.st_mode))
             {
-                if(cwd==root)
+                if(strcmp(cwd,root))
                 {
-                    
-                }
-                else
-                {
+                    stack_backward.push(cwd);
                     chdir(dir_cur[position]->d_name);
                     
                     position=0;
                     scroll_up=1;
-                    scroll_down=20;
+                    scroll_down=18;
                     cursor=1;
                     
                     goto FOREVER;
                 }
-                
                 
             }
             else
@@ -232,7 +225,7 @@ int normal_mode()
             
             position=0;
             scroll_up=1;
-            scroll_down=20;
+            scroll_down=18;
             cursor=1;
             
             goto FOREVER;
@@ -240,20 +233,24 @@ int normal_mode()
         }
         else if(c==127)
         {
-        	for(int k=0;k<stack_forward.size();k++)
-            {
-                stack_forward.pop();
-            }
 
             getcwd(cwd, sizeof(cwd));
-            
-            stack_backward.push(cwd);
+            //cout<<cwd<<"xxxxx"<<root<<endl;
 
-            chdir("..");
+            if(strcmp(cwd,root))
+            {
+                for(int k=0;k<stack_forward.size();k++)
+                {
+                    stack_forward.pop();
+                }
+                stack_backward.push(cwd);
+                chdir("..");
+            }
+            
             
             position=0;
             scroll_up=1;
-            scroll_down=20;
+            scroll_down=18;
             cursor=1;
             
             goto FOREVER;
@@ -277,7 +274,7 @@ int normal_mode()
             printf("\033[1;1H");
             position=0;
             scroll_up=1;
-            scroll_down=20;
+            scroll_down=18;
             cursor=1;
             goto FOREVER;
         }
