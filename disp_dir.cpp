@@ -28,12 +28,12 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down)
 
 				if(i<=scroll_down&&i>=scroll_up)
 				{
-					printf("%10d\t",i);
+					//printf("%4d\t",i);
 					
 					
-					if(strlen(dir->d_name)>20)
+					if(strlen(dir->d_name)>15)
 					{
-						for(int j=0;j<18;j++)
+						for(int j=0;j<13;j++)
 						{
 						printf("%c",dir->d_name[j]);
 						}
@@ -41,14 +41,25 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down)
 					}
 					else
 					{
-						printf("%20s",dir->d_name);
+						printf("%15s",dir->d_name);
 					}
 					//cout<<"\t";
 					stat(dir->d_name, &st);
 					size = st.st_size;
-					printf("%10d\t", size);
-				
-					
+					if(size>1024*1024)
+					{
+						size=size/1024/1024;
+						printf("%5dMB ", size);
+					}
+					else if(size>1024)
+					{
+						size=size/1024;
+						printf("%5dKB ", size);
+					}
+					else
+					{
+						printf("%5d B ", size);	
+					}
 					printf( (S_ISDIR(st.st_mode)) ? "d" : "-");
 					printf( (st.st_mode & S_IRUSR) ? "r" : "-");
 					printf( (st.st_mode & S_IWUSR) ? "w" : "-");
@@ -59,7 +70,7 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down)
 					printf( (st.st_mode & S_IROTH) ? "r" : "-");
 					printf( (st.st_mode & S_IWOTH) ? "w" : "-");
 					printf( (st.st_mode & S_IXOTH) ? "x" : "-");
-					printf("\t");
+					printf("  ");
 					
 					//time Display
 					long int tim=(st.st_mtime);
@@ -72,7 +83,7 @@ vector<struct dirent *> disp_dir(int scroll_up,int scroll_down)
 	       	closedir(d);
 		}
 	//cout<<
-		cout<<"\033[36;1H";
+		cout<<"\033[22;1H";
         cout<<"WELCOME TO NORMAL MODE";
 	return v;
 }

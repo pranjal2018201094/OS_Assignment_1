@@ -43,7 +43,7 @@ int normal_mode()
     // tcsetattr(0, TCSANOW, &oterm);
     fflush(stdout);
 
-    int scroll_up=1,scroll_down=10,cursor=1,flag=0;
+    int scroll_up=1,scroll_down=20,cursor=1,flag=0;
     
     FOREVER : vector <struct dirent *> dir_cur(disp_dir(scroll_up,scroll_down));
    
@@ -105,7 +105,7 @@ int normal_mode()
                         position++;
                         printf("\033[1B");
 
-                    	if(cursor>=10)
+                    	if(cursor>=20)
 	                    {
                             scroll_down++;
                             scroll_up++;
@@ -132,7 +132,7 @@ int normal_mode()
                         
                         position=0;
 		                scroll_up=1;
-		                scroll_down=10;
+		                scroll_down=20;
 		                cursor=1;
                         
                         goto FOREVER;
@@ -156,7 +156,7 @@ int normal_mode()
 
                         position=0;
 		                scroll_up=1;
-		                scroll_down=10;
+		                scroll_down=20;
 		                cursor=1;
 
                         goto FOREVER;
@@ -188,15 +188,23 @@ int normal_mode()
             
             if(S_ISDIR(st.st_mode))
             {
+                if(cwd==root)
+                {
+                    
+                }
+                else
+                {
+                    chdir(dir_cur[position]->d_name);
+                    
+                    position=0;
+                    scroll_up=1;
+                    scroll_down=20;
+                    cursor=1;
+                    
+                    goto FOREVER;
+                }
                 
-                chdir(dir_cur[position]->d_name);
                 
-                position=0;
-                scroll_up=1;
-                scroll_down=10;
-                cursor=1;
-                
-                goto FOREVER;
             }
             else
             {
@@ -224,7 +232,7 @@ int normal_mode()
             
             position=0;
             scroll_up=1;
-            scroll_down=10;
+            scroll_down=20;
             cursor=1;
             
             goto FOREVER;
@@ -245,7 +253,7 @@ int normal_mode()
             
             position=0;
             scroll_up=1;
-            scroll_down=10;
+            scroll_down=20;
             cursor=1;
             
             goto FOREVER;
@@ -262,12 +270,15 @@ int normal_mode()
         else if (c==58)
         {
             //tcsetattr(0, TCSANOW, &oterm);
-            cout<<"\033[36;1H";
-            cout<<"WELCOME TO COMMAND MODE :: ENTER EXIT TO GO TO NORMAL MODE";
-            cout<<"\033[40;1H";
+            cout<<"\033[22;1H";
+            cout<<"WELCOME TO COMMAND MODE :: PRESS ESC TO GO TO NORMAL MODE";
+            cout<<"\033[24;1H";
             command_mode_main();
             printf("\033[1;1H");
-            //break;
+            position=0;
+            scroll_up=1;
+            scroll_down=20;
+            cursor=1;
             goto FOREVER;
         }
 
