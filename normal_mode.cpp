@@ -20,7 +20,7 @@ int normal_mode()
 
 
     char cwd[256],root[256];
-
+    string ROOT(root);
     stack<string>stack_backward;
     stack<string>stack_forward;
 	
@@ -270,7 +270,7 @@ int normal_mode()
             cout<<"\033[22;1H";
             cout<<"WELCOME TO COMMAND MODE :: PRESS ESC TO GO TO NORMAL MODE";
             cout<<"\033[24;1H";
-            command_mode_main();
+            command_mode_main(ROOT);
             printf("\033[1;1H");
             position=0;
             scroll_up=1;

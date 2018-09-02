@@ -20,9 +20,10 @@ int create_f_d(string stream0,string stream1,string stream2);
 int cp_mv(vector<string>v);
 
 
-int command_mode_main()
+int command_mode_main(string root)
 {
     //cout<<"$";
+    TOP :
     char c,buffer[500]="";
     int i=0;
     while(1)
@@ -40,17 +41,19 @@ int command_mode_main()
 		    }
 		    
 		    custom_command(stream);
+            goto TOP;
             /*for(int i=0;i<stream.size();i++)
             {
                 cout<<stream[i];
             }*/
-		    i=0;
+		    /*i=0;
 		    while(buffer[i]!='\0')
 		    {
-		    	buffer[i]='\0';
+		    	buffer[i]='';
 		    	i++;
 		    }
-		    i=i-1;
+            //buffer[500]="";
+		    i=i-1;*/
     	}
     	else if(c==27)
     	{
@@ -58,12 +61,12 @@ int command_mode_main()
     	}
     	else if(c==127)
     	{
-    		i=i-1;
+    		/*i=i-1;
     		buffer[i]=' ';
     		cout<<buffer[i];
     		buffer[i]='\0';
     		cout<<"\033[1D";
-    		//break;
+    		//break;*/
     	}
     	else
     	{
@@ -87,7 +90,7 @@ int custom_command(vector<string>stream)
     }
     else if(stream[0]=="goto") 
     {
-        //cout<<"\033[2J\033[1;1H";
+        //cout<<stream[1][0];
         chdir(stream[1].c_str());
         commandModeDisp();
         cout<<"\033[22;1H";
